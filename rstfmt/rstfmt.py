@@ -410,7 +410,7 @@ class Formatters:
             if isinstance(c, docutils.nodes.term):
                 yield from fmt(c, ctx)
             elif isinstance(c, docutils.nodes.definition):
-                yield from with_spaces(3, fmt(c, ctx.indent(3)))
+                yield from with_spaces(4, fmt(c, ctx.indent(4)))
 
     @staticmethod
     def definition_list(node: docutils.nodes.definition_list, ctx: FormatContext) -> line_iterator:
@@ -424,7 +424,7 @@ class Formatters:
 
     @staticmethod
     def field_body(node: docutils.nodes.field_body, ctx: FormatContext) -> line_iterator:
-        yield from with_spaces(3, chain(fmt_children(node, ctx.indent(3))))
+        yield from with_spaces(4, chain(fmt_children(node, ctx.indent(4))))
 
     @staticmethod
     def field(node: docutils.nodes.field, ctx: FormatContext) -> line_iterator:
@@ -459,8 +459,8 @@ class Formatters:
     @staticmethod
     def block_quote(node: docutils.nodes.block_quote, ctx: FormatContext) -> line_iterator:
         yield from with_spaces(
-            3,
-            chain_intersperse("", fmt_children(node, ctx.indent(3))),
+            4,
+            chain_intersperse("", fmt_children(node, ctx.indent(4))),
         )
 
     @staticmethod
@@ -472,12 +472,12 @@ class Formatters:
             yield f"   :{k}:" if v is None else f"   :{k}: {v}"
 
         if d.raw:
-            yield from prepend_if_any("", with_spaces(3, d.content))
+            yield from prepend_if_any("", with_spaces(4, d.content))
         else:
             sub_doc = parse_string("\n".join(d.content))
             if sub_doc.children:
                 yield ""
-                yield from with_spaces(3, fmt(sub_doc, ctx.indent(3)))
+                yield from with_spaces(4, fmt(sub_doc, ctx.indent(4)))
 
     @staticmethod
     def section(node: docutils.nodes.section, ctx: FormatContext) -> line_iterator:
@@ -546,7 +546,7 @@ class Formatters:
         yield f".. [{name}]"
         yield ""
         yield from with_spaces(
-            3,
+            4,
             chain_intersperse(
                 "", (fmt(c, ctx) for c in node.children if not isinstance(c, docutils.nodes.label))
             ),
@@ -573,7 +573,7 @@ class Formatters:
             yield "|"
             return
 
-        indent = 3 * ctx.line_block_depth
+        indent = 4 * ctx.line_block_depth
         ctx = ctx.indent(indent)
         prefix1 = "|" + " " * (indent - 1)
         prefix2 = " " * indent
@@ -686,7 +686,7 @@ class Formatters:
         yield ".."
         if node.children:
             text = "\n".join(chain(fmt_children(node, ctx)))
-            yield from with_spaces(3, text.split("\n"))
+            yield from with_spaces(4, text.split("\n"))
 
     @staticmethod
     def literal_block(node: docutils.nodes.literal_block, ctx: FormatContext) -> line_iterator:
@@ -703,7 +703,7 @@ class Formatters:
         else:
             text = func(text)
 
-        yield from with_spaces(3, text.split("\n"))
+        yield from with_spaces(4, text.split("\n"))
 
     @staticmethod
     def substitution_definition(
@@ -720,11 +720,11 @@ class Formatters:
         if body.attributes["directive"].options.get("alt") == node.attributes["names"][0]:
             del body.attributes["directive"].options["alt"]
 
-        lines = fmt(body, ctx.indent(3))
+        lines = fmt(body, ctx.indent(4))
         name = node.attributes["names"][0]
         first = next(lines)
         assert first.startswith(".. ")
-        yield f".. |{name}| " + first[3:]
+        yield f".. |{name}| " + first[4:]
         yield from lines
 
 
