@@ -361,7 +361,7 @@ class Formatters:
     def _list(node: docutils.nodes.Node, ctx: FormatContext) -> line_iterator:
         ctx2 = ctx.with_bullet(ctx.bullet2)
         subs = [list(fmt(c, ctx2 if i else ctx)) for (i, c) in enumerate(node.children)]
-        if any(len(s) > 2 for s in subs):
+        if any(len(s) > 3 for s in subs):
             yield from chain_intersperse("", subs)
         else:
             yield from chain(subs)
@@ -448,7 +448,7 @@ class Formatters:
         text = " ".join(wrap_text(None, chain(fmt_children(node, ctx))))
         char = section_chars[ctx.section_depth - 1]
         if ctx.section_depth <= max_overline_depth:
-            line = char * (len(text) + 2)
+            line = char * (len(text) + 3)
             yield line
             yield " " + text
             yield line
@@ -491,12 +491,12 @@ class Formatters:
     @staticmethod
     def row(node: docutils.nodes.row, ctx: FormatContext) -> line_iterator:
         all_lines = [
-            chain_intersperse("", fmt_children(entry, ctx.with_width(w - 2)))
+            chain_intersperse("", fmt_children(entry, ctx.with_width(w - 3)))
             for entry, w in zip(node.children, ctx.colwidths)
         ]
         for line_group in itertools.zip_longest(*all_lines):
             yield "|" + "|".join(
-                " " + (line or "").ljust(w - 2) + " " for line, w in zip(line_group, ctx.colwidths)
+                " " + (line or "").ljust(w - 3) + " " for line, w in zip(line_group, ctx.colwidths)
             ) + "|"
 
     @staticmethod
