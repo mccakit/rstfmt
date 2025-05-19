@@ -496,7 +496,7 @@ class Formatters:
         ]
         for line_group in itertools.zip_longest(*all_lines):
             yield "|" + "|".join(
-                " " + (line or "").ljust(w - 3) + " " for line, w in zip(line_group, ctx.colwidths)
+                " " + (line or "").ljust(w - 4) + " " for line, w in zip(line_group, ctx.colwidths)
             ) + "|"
 
     @staticmethod
